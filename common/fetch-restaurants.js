@@ -2,22 +2,21 @@ var request = require("request-promise");
 var cheerio = require("cheerio");
 
 const fetchRestaurants = url => {
-  var restaurants = [];
-
-  request(url).then(b => {
+  return request(url).then(b => {
     $ = cheerio.load(b);
-    $(".ResultMainPanel").find(".RestRMAINP.Resturant").each((i, e) => {
-      var temp = {
-        name: $(e).find(".RestLB.Rub1").text().trim(),
-        meals: $(e)
-          .find(".RestLNAME.LNAME.Btex")
-          .map((i, e) => $(e).text())
-          .get()
-      };
-      restaurants.push(temp);
-    });
-    return restaurants;
+    return $(".ResultMainPanel")
+      .find(".RestRMAINP.Resturant")
+      .map((i, e) => {
+        return {
+          name: $(e).find(".RestLB.Rub1").text().trim(),
+          meals: $(e)
+            .find(".RestLNAME.LNAME.Btex")
+            .map((i, e) => $(e).text())
+            .get()
+        };
+      })
+      .get();
   });
 };
 
-module.exports = rests;
+module.exports = fetchRestaurants;

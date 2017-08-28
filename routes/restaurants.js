@@ -1,5 +1,5 @@
 var express = require("express");
-var restaurants = require("../common/restaurants");
+var fetchRestaurants = require("../common/fetch-restaurants");
 var router = express.Router();
 
 var url =
@@ -7,7 +7,7 @@ var url =
 
 /* GET users listing. */
 router.post("/", function(req, res, next) {
-  res.json(restaurants(url));
+  fetchRestaurants(url).then(x => res.json(x));
 });
 
 module.exports = router;
